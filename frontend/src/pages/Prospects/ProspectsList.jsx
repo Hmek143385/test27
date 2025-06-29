@@ -29,6 +29,9 @@ export default function ProspectsList() {
     assigned_to: "",
   });
 
+  // Ajout d'une liste déroulante pour l'attribution (commercial)
+  const [collaborateurs, setCollaborateurs] = React.useState([]);
+
   const itemsPerPage = 10;
 
   const fetchProspects = async () => {
@@ -53,8 +56,14 @@ export default function ProspectsList() {
 
   React.useEffect(() => {
     fetchProspects();
+    fetchCollaborateurs();
     // eslint-disable-next-line
   }, [statusFilter, sourceFilter, searchTerm]);
+
+  const fetchCollaborateurs = async () => {
+    const { data } = await supabase.from('collaborateurs').select('id, first_name, last_name, role');
+    setCollaborateurs(data ? data.filter(c => c.role && c.role.toLowerCase().includes('commercial')) : []);
+  };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -126,6 +135,7 @@ export default function ProspectsList() {
     }));
   };
 
+  // Ajout d'un refresh après chaque ajout/modif/suppression
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -140,7 +150,7 @@ export default function ProspectsList() {
         if (error) throw error;
       }
       closeModal();
-      fetchProspects();
+      await fetchProspects();
     } catch (error) {
       setError("Erreur lors de la sauvegarde du prospect");
     }
@@ -150,7 +160,7 @@ export default function ProspectsList() {
     try {
       const { error } = await supabase.from("contacts").delete().eq("id", id);
       if (error) throw error;
-      fetchProspects();
+      await fetchProspects();
     } catch (error) {
       setError("Erreur lors de la suppression du prospect");
     }
@@ -430,7 +440,12 @@ export default function ProspectsList() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Assigné à</label>
-                  <input type="text" name="assigned_to" value={formData.assigned_to} onChange={handleFormChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors" />
+                  <select name="assigned_to" value={formData.assigned_to} onChange={handleFormChange} required className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors">
+                    <option value="">Sélectionner un commercial</option>
+                    {collaborateurs.map(c => (
+                      <option key={c.id} value={c.id}>{c.first_name} {c.last_name}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="mt-6">
