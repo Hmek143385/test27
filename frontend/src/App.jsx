@@ -8,6 +8,7 @@ import TachesList from './pages/Taches/TachesList';
 import CampagnesList from './pages/Campagnes/CampagnesList';
 import RapportsDashboard from './pages/Rapports/RapportsDashboard';
 import SegmentationList from './pages/Segmentation/SegmentationList';
+import TemplatesList from './pages/Templates/TemplatesList';
 
 // Pages d'interface par rôle (à créer si besoin)
 const AdminInterface = () => <div className="p-6"><h2>Interface Admin</h2></div>;
@@ -28,6 +29,7 @@ function App() {
             <Route path="/campagnes" element={<CampagnesList />} />
             <Route path="/rapports" element={<RapportsDashboard />} />
             <Route path="/segmentation" element={<SegmentationList />} />
+            <Route path="/templates" element={<TemplatesList />} />
             <Route path="/admin" element={<AdminInterface />} />
             <Route path="/commercial" element={<CommercialInterface />} />
             <Route path="/marketeur" element={<MarketeurInterface />} />
