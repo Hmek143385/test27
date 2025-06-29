@@ -184,255 +184,262 @@ export default function ProspectsList() {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Gestion des Prospects</h2>
+    <div className="flex flex-col min-h-screen bg-[#f8f9fc] font-inter">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200 p-6 flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
+            Gestion des Prospects
+          </h2>
+          <p className="text-gray-600 mt-1">
+            Gérez vos prospects et suivez leur progression
+          </p>
+        </div>
         <button
           onClick={() => {
             setShowModal(true);
             setModalMode("create");
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all duration-200 transform hover:scale-105"
         >
-          + Nouveau Prospect
+          <i className="fas fa-plus mr-2"></i>
+          Nouveau Prospect
         </button>
+      </header>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">Total Prospects</p>
+              <p className="text-3xl font-bold text-gray-900">{totalProspects}</p>
+            </div>
+            <div className="bg-gradient-to-r from-blue-400 to-blue-600 p-4 rounded-xl">
+              <i className="fas fa-users text-white text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">Nouveaux</p>
+              <p className="text-3xl font-bold text-gray-900">{newProspects}</p>
+            </div>
+            <div className="bg-gradient-to-r from-green-400 to-green-600 p-4 rounded-xl">
+              <i className="fas fa-user-plus text-white text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">Qualifiés</p>
+              <p className="text-3xl font-bold text-gray-900">{qualifiedProspects}</p>
+            </div>
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 p-4 rounded-xl">
+              <i className="fas fa-star text-white text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">Convertis</p>
+              <p className="text-3xl font-bold text-gray-900">{convertedProspects}</p>
+            </div>
+            <div className="bg-gradient-to-r from-purple-400 to-purple-600 p-4 rounded-xl">
+              <i className="fas fa-check-circle text-white text-xl"></i>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="mb-4">
-        <input
-          value={searchTerm}
-          onChange={handleSearch}
-          placeholder="Rechercher par prénom ou nom"
-          className="border px-2 py-1 rounded w-full"
-        />
+
+      {/* Filtres et recherche */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 md:space-x-4 px-6 mb-4">
+        <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Rechercher un prospect..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent w-64"
+            />
+            <i className="fas fa-search absolute left-3 top-4 text-gray-400"></i>
+          </div>
+          <select
+            value={statusFilter}
+            onChange={handleStatusFilter}
+            className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent"
+          >
+            <option value="">Tous les statuts</option>
+            <option value="nouveau">Nouveau</option>
+            <option value="qualifié">Qualifié</option>
+            <option value="converti">Converti</option>
+            <option value="perdu">Perdu</option>
+          </select>
+          <select
+            value={sourceFilter}
+            onChange={handleSourceFilter}
+            className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent"
+          >
+            <option value="">Toutes les sources</option>
+            <option value="site_web">Site Web</option>
+            <option value="referencement">Référencement</option>
+            <option value="publicite">Publicité</option>
+            <option value="autres">Autres</option>
+          </select>
+        </div>
       </div>
-      <div className="mb-4 flex gap-2">
-        <select
-          value={statusFilter}
-          onChange={handleStatusFilter}
-          className="border px-2 py-1 rounded w-full"
-        >
-          <option value="">Tous les statuts</option>
-          <option value="nouveau">Nouveau</option>
-          <option value="qualifié">Qualifié</option>
-          <option value="converti">Converti</option>
-          <option value="perdu">Perdu</option>
-        </select>
-        <select
-          value={sourceFilter}
-          onChange={handleSourceFilter}
-          className="border px-2 py-1 rounded w-full"
-        >
-          <option value="">Toutes les sources</option>
-          <option value="site_web">Site Web</option>
-          <option value="réseaux_sociaux">Réseaux Sociaux</option>
-          <option value="référencement">Référencement</option>
-          <option value="autre">Autre</option>
-        </select>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border rounded-lg overflow-hidden">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border px-4 py-2 text-left">Nom</th>
-              <th className="border px-4 py-2 text-left">Prénom</th>
-              <th className="border px-4 py-2 text-left">Email</th>
-              <th className="border px-4 py-2 text-left">Téléphone</th>
-              <th className="border px-4 py-2 text-left">Âge</th>
-              <th className="border px-4 py-2 text-left">Statut</th>
-              <th className="border px-4 py-2 text-left">Source</th>
-              <th className="border px-4 py-2 text-left">Notes</th>
-              <th className="border px-4 py-2 text-left">Attribution</th>
-              <th className="border px-4 py-2 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentProspects.map((p) => (
-              <tr key={p.id} className="hover:bg-gray-50">
-                <td className="border px-4 py-2">{p.last_name}</td>
-                <td className="border px-4 py-2">{p.first_name}</td>
-                <td className="border px-4 py-2">{p.email}</td>
-                <td className="border px-4 py-2">{p.phone}</td>
-                <td className="border px-4 py-2">{p.age}</td>
-                <td className="border px-4 py-2">
-                  <span
-                    className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                      getStatusColor(p.status)
-                    }`}
-                  >
-                    {p.status}
-                  </span>
-                </td>
-                <td className="border px-4 py-2">{p.source}</td>
-                <td className="border px-4 py-2">{p.notes}</td>
-                <td className="border px-4 py-2">{p.assigned_to}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => openModal("edit", p)}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded mr-2"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    onClick={() => handleDelete(p.id)}
-                    className="bg-red-600 text-white px-3 py-1 rounded"
-                  >
-                    Supprimer
-                  </button>
-                </td>
+
+      {/* Table principale */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mx-6">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prospect</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Âge</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date création</th>
+                <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-4 flex justify-between items-center">
-        <div>
-          <span className="text-sm text-gray-700">
-            Affichage de{" "}
-            <span className="font-semibold">{startIndex + 1}</span> à{" "}
-            <span className="font-semibold">{Math.min(endIndex, totalProspects)}</span>{" "}
-            sur{" "}
-            <span className="font-semibold">{totalProspects}</span> prospects
-          </span>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {currentProspects.map((prospect) => (
+                <tr key={prospect.id} className="hover:bg-gray-50 transition-colors duration-200">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-12 w-12">
+                        <div className="h-12 w-12 rounded-full bg-gradient-to-r from-[#667eea] to-[#764ba2] flex items-center justify-center">
+                          <span className="text-sm font-medium text-white">
+                            {prospect.first_name?.charAt(0)}{prospect.last_name?.charAt(0)}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">
+                          {prospect.first_name} {prospect.last_name}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{prospect.email}</div>
+                    <div className="text-sm text-gray-500">{prospect.phone}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{prospect.age || "-"}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(prospect.status)}`}>
+                      {prospect.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{prospect.source || "-"}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(prospect.created_at).toLocaleDateString("fr-FR")}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div className="flex items-center justify-end space-x-3">
+                      <button onClick={() => openModal("edit", prospect)} className="text-green-600 hover:text-green-900 p-2 hover:bg-green-50 rounded-lg transition-colors">
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button onClick={() => handleDelete(prospect.id)} className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors">
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            className="bg-gray-300 text-gray-700 px-3 py-1 rounded-l"
-            disabled={currentPage === 1}
-          >
-            Précédent
-          </button>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            className="bg-gray-300 text-gray-700 px-3 py-1 rounded-r"
-            disabled={currentPage === totalPages}
-          >
-            Suivant
-          </button>
-        </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-gray-700">
+                Affichage de {startIndex + 1} à {Math.min(endIndex, totalProspects)} sur {totalProspects} prospects
+              </div>
+              <div className="flex items-center space-x-3">
+                <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Précédent
+                </button>
+                <span className="text-sm text-gray-700 px-4 py-2 bg-white rounded-lg border">Page {currentPage} sur {totalPages}</span>
+                <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Suivant
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
-            <h3 className="text-lg font-semibold mb-4">
-              {modalMode === "create" ? "Ajouter un Prospect" : "Modifier le Prospect"}
-            </h3>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Prénom</label>
-                <input
-                  name="first_name"
-                  value={formData.first_name}
-                  onChange={handleFormChange}
-                  placeholder="Prénom"
-                  className="border px-3 py-2 rounded w-full"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Nom</label>
-                <input
-                  name="last_name"
-                  value={formData.last_name}
-                  onChange={handleFormChange}
-                  placeholder="Nom"
-                  className="border px-3 py-2 rounded w-full"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Email</label>
-                <input
-                  name="email"
-                  value={formData.email}
-                  onChange={handleFormChange}
-                  placeholder="Email"
-                  className="border px-3 py-2 rounded w-full"
-                  type="email"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Téléphone</label>
-                <input
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleFormChange}
-                  placeholder="Téléphone"
-                  className="border px-3 py-2 rounded w-full"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Âge</label>
-                <input
-                  name="age"
-                  value={formData.age}
-                  onChange={handleFormChange}
-                  placeholder="Âge"
-                  className="border px-3 py-2 rounded w-full"
-                  type="number"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Statut</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleFormChange}
-                  className="border px-3 py-2 rounded w-full"
-                >
-                  <option value="nouveau">Nouveau</option>
-                  <option value="qualifié">Qualifié</option>
-                  <option value="converti">Converti</option>
-                  <option value="perdu">Perdu</option>
-                </select>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Source</label>
-                <input
-                  name="source"
-                  value={formData.source}
-                  onChange={handleFormChange}
-                  placeholder="Source"
-                  className="border px-3 py-2 rounded w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Notes</label>
-                <textarea
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleFormChange}
-                  placeholder="Notes"
-                  className="border px-3 py-2 rounded w-full"
-                  rows="3"
-                ></textarea>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Attribution</label>
-                <input
-                  name="assigned_to"
-                  value={formData.assigned_to}
-                  onChange={handleFormChange}
-                  placeholder="Attribution (UUID)"
-                  className="border px-3 py-2 rounded w-full"
-                />
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="submit"
-                  className="bg-green-600 text-white px-4 py-2 rounded"
-                >
-                  {modalMode === "create" ? "Ajouter" : "Modifier"}
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-[#667eea]/10 to-[#764ba2]/10">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-gray-900">{modalMode === "create" ? "Nouveau Prospect" : "Modifier le Prospect"}</h3>
+                <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                  <i className="fas fa-times text-xl"></i>
                 </button>
-                <button
-                  onClick={closeModal}
-                  className="bg-gray-400 text-white px-4 py-2 rounded"
-                >
-                  Annuler
-                </button>
+              </div>
+            </div>
+            <form onSubmit={handleSubmit} className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
+                  <input type="text" name="first_name" value={formData.first_name} onChange={handleFormChange} required className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                  <input type="text" name="last_name" value={formData.last_name} onChange={handleFormChange} required className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleFormChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleFormChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Âge</label>
+                  <input type="number" name="age" value={formData.age} onChange={handleFormChange} min="0" max="120" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Statut</label>
+                  <select name="status" value={formData.status} onChange={handleFormChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors">
+                    <option value="nouveau">Nouveau</option>
+                    <option value="qualifié">Qualifié</option>
+                    <option value="converti">Converti</option>
+                    <option value="perdu">Perdu</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Source</label>
+                  <select name="source" value={formData.source} onChange={handleFormChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors">
+                    <option value="">Sélectionner une source</option>
+                    <option value="site_web">Site Web</option>
+                    <option value="referencement">Référencement</option>
+                    <option value="publicite">Publicité</option>
+                    <option value="autres">Autres</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Assigné à</label>
+                  <input type="text" name="assigned_to" value={formData.assigned_to} onChange={handleFormChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors" />
+                </div>
+              </div>
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                <textarea name="notes" value={formData.notes} onChange={handleFormChange} rows="4" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#667eea] focus:border-transparent transition-colors" placeholder="Notes sur le prospect..."></textarea>
+              </div>
+              <div className="flex items-center justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                <button type="button" onClick={closeModal} className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors">Annuler</button>
+                <button type="submit" className="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl hover:shadow-lg transition-all duration-200 transform hover:scale-105">{modalMode === "create" ? "Créer" : "Modifier"}</button>
               </div>
             </form>
           </div>
@@ -444,9 +451,7 @@ export default function ProspectsList() {
         </div>
       )}
       {error && (
-        <div className="mt-4 text-red-600 text-center">
-          {error}
-        </div>
+        <div className="mt-4 text-red-600 text-center">{error}</div>
       )}
     </div>
   );
